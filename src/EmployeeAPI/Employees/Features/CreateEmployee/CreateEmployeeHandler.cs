@@ -29,8 +29,6 @@ namespace EmployeeAPI.Employees.Features.AddEmployee
     }
     public class CreateEmployeeCommandHandler(EmployeesDbContext dbContext , ITenantService tenantService) : ICommandHandler<CreateEmployeeCommand, CreateEmployeeResult>
     {
-        private readonly ITenantService tenantService = tenantService;
-
         public async Task<CreateEmployeeResult> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
             var employee = CreateNewEmployee(command.Employee);

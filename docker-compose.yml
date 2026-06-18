@@ -1,6 +1,36 @@
 services:
-  employeesdb:
-    image: postgres
+  postgres:
+    image: postgres:16-alpine
+    container_name: employee-postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: employeedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d employeedb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  employee-api:
+    image: employee-api:latest
+    container_name: employee-api-service
+    build:
+      context: .
+      dockerfile: src/EmployeeAPI/Dockerfile 
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=employeedb;Username=myuser;Password=mypassword;
+    depends_on:
+      postgres:
+        condition: service_healthy 
 
 volumes:
-  postgres_employees:
+  postgres_data:

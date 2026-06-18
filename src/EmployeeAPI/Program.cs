@@ -17,7 +17,7 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
 
 
-var connectionString = builder.Configuration.GetConnectionString("Database");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<EmployeesDbContext>((sp, options) =>
 {

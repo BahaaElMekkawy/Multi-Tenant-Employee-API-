@@ -1,6 +1,6 @@
 ﻿namespace EmployeeAPI.Employees.Dtos
 {
-       public record CreateEmployeeDto(Guid Id,
+       public record CreateEmployeeDto(
             string FirstName,
             string LastName,
             string Email,
