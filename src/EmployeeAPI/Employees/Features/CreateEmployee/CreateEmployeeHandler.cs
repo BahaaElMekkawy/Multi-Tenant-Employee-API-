@@ -11,7 +11,23 @@ namespace EmployeeAPI.Employees.Features.AddEmployee
         : ICommand<CreateEmployeeResult>;
 
     public record CreateEmployeeResult(Guid Id);
-    public class CreateEmployeeHandler(EmployeesDbContext dbContext , ITenantService tenantService) : ICommandHandler<CreateEmployeeCommand, CreateEmployeeResult>
+
+    public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCommand>
+    {
+        public CreateEmployeeCommandValidator()
+        {
+            RuleFor(x => x.Employee).NotNull();
+            RuleFor(x => x.Employee.FirstName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Employee.LastName).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Employee.Email).NotEmpty().EmailAddress().MaximumLength(255);
+            RuleFor(x => x.Employee.Department).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.Employee.Status).NotEmpty().Must(status => Enum.TryParse<EmployeeStatus>(status, out _)).WithMessage("Invalid employee status.");
+            RuleFor(x => x.Employee.Salary).NotNull();
+            RuleFor(x => x.Employee.Salary.AmountMinor).GreaterThanOrEqualTo(0);
+            RuleFor(x => x.Employee.Salary.CurrencyCode).NotEmpty().Length(3);
+        }
+    }
+    public class CreateEmployeeCommandHandler(EmployeesDbContext dbContext , ITenantService tenantService) : ICommandHandler<CreateEmployeeCommand, CreateEmployeeResult>
     {
         private readonly ITenantService tenantService = tenantService;
 

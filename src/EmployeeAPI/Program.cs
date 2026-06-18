@@ -1,24 +1,27 @@
 
-using EmployeeAPI.Tenancy;
-using Shared.Exceptions.Handler;
-
 var builder = WebApplication.CreateBuilder(args);
+
 var assembly = typeof(Program).Assembly;
 
 //Add Services to the container.
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
-    //config.AddOpenBehavior(typeof(ValidationBehavior<,>));
-    //config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
 builder.Services.AddCarter();
 
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+
+
 var connectionString = builder.Configuration.GetConnectionString("Database");
 
-builder.Services.AddDbContext<EmployeesDbContext>(options =>
+builder.Services.AddDbContext<EmployeesDbContext>((sp, options) =>
 {
+    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
     options.UseNpgsql(connectionString);
 });
 

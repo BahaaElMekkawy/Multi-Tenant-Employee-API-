@@ -9,6 +9,13 @@ global using MediatR;
 global using Mapster;
 global using Shared.CQRS;
 global using EmployeeAPI.Exceptions;
+global using FluentValidation;
+global  using EmployeeAPI.Tenancy;
+global  using Microsoft.EntityFrameworkCore.Diagnostics;
+global  using Shared.Behaviours;
+global  using Shared.Exceptions.Handler;
+global  using Shared.Interceptors;
+
 
 
 
