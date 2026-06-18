@@ -1,14 +1,32 @@
 # Multi-Tenant Employee API
 
-A production-ready, highly secure .NET 10 Web API utilizing modern architectural patterns to implement a robust **Multi-Tenant** system with complete data isolation per tenant. 
+A production-ready **.NET 10 Web API** demonstrating a robust multi-tenant architecture built using **Vertical Slice Architecture (VSA)**. The project replaces traditional rigid layering with cohesive, feature-based slices, implementing modern software engineering patterns including CQRS, Domain-Driven Design (DDD) principles, automated data auditing, and soft-deletes—fully containerized using Docker.
 
-##  Architecture & Features
+---
 
-* **Multi-Tenancy Isolation:** Implements isolated tenant scopes resolved per request via a custom HTTP Header (`X-Tenant-Id`).
-* **Global Query Filters:** Built safely with EF Core query filters to automatically restrict data access boundaries, preventing cross-tenant data leaks.
-* **PostgreSQL Native Handling:** Supports schema-less dynamic data using the native PostgreSQL `jsonb` column engine mapped via .NET `JsonDocument`.
-* **Soft Deletes:** Intercepts deletions to preserve audit records while hiding them from active application workflows.
-* **Containerized Environment:** Fully orchestrated multi-stage container deployment linking the API service with a live database engine.
+## 🏗️ Architecture & Technology Stack
+
+The application is built around modern .NET paradigms, emphasizing loose coupling, high cohesion within features, and a highly maintainable code structure.
+
+### Architectural Patterns
+* **Vertical Slice Architecture (VSA):** Instead of dividing the application into traditional horizontal layers (Controllers, Services, Repositories), the system is organized around distinct business features or use cases. Each slice is self-contained and encapsulates its own domain logic, data mapping, and API endpoints.
+* **CQRS (Command Query Responsibility Segregation):** Features are structured cleanly into discrete Commands (write operations) and Queries (read operations), processed via specialized in-memory `MediatR` handlers within their respective slices.
+* **Multi-Tenancy:** Automated tenant resolution via standard HTTP headers handled gracefully through a dedicated `TenantService` and `IHttpContextAccessor`.
+* **Domain-Driven Design (DDD) Elements:** Implementation of explicit Domain Models, Data Transfer Objects (DTOs), and immutability via Value Objects (e.g., `Money`).
+* **Cross-Cutting Concerns:** * Automated data-auditing via an EF Core `AuditableEntityInterceptor`.
+  * Global soft-delete query filters handled during EF model compilation.
+  * Centralized pipeline request validation (`ValidationBehavior`).
+  * Standardized global API error responses via a custom `ExceptionHandler` middleware.
+
+### Key Technologies
+* **Runtime & Framework:** `.NET 10` & `ASP.NET Core`
+* **Routing & Minimal APIs:** `Carter` for elegant, modular, and maintainable endpoint mapping (`app.MapCarter()`). It allows endpoints to be declared directly inside their corresponding vertical slices, eliminating controller overhead.
+* **Mediator Pattern:** `MediatR` to decouple HTTP endpoints from application logic using an in-memory Request/Response pipeline.
+* **Validation:** `FluentValidation` for robust request validation, automatically piped through a centralized MediatR middleware behavior.
+* **Data Persistence:** `Entity Framework Core` with `Npgsql` targeting a **PostgreSQL** instance.
+* **Containerization:** `Docker` and `Docker Compose` for instant, cross-platform local development alignment.
+
+---
 
 ---
 
