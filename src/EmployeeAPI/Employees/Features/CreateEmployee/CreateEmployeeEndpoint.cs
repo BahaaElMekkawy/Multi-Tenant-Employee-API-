@@ -5,7 +5,7 @@ using MediatR;
 
 namespace EmployeeAPI.Employees.Features.AddEmployee
 {
-    public record CreateEmployeeRequest(EmployeeDto Employee);
+    public record CreateEmployeeRequest(CreateEmployeeDto Employee);
     public record CreateEmployeeResponse(Guid Id);
     public class CreateEmployeeEndpoint : ICarterModule
     {

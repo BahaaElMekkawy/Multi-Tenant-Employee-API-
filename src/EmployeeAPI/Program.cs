@@ -1,4 +1,5 @@
 
+using EmployeeAPI.Tenancy;
 using Shared.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,9 @@ builder.Services.AddDbContext<EmployeesDbContext>(options =>
 
 builder.Services.AddScoped<IDataSeeder, EmployeesDataSeeder>();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantService, TenantService>();
 
 
 var app = builder.Build();

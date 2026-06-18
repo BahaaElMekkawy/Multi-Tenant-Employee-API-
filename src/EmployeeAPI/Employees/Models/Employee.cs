@@ -15,5 +15,6 @@ namespace EmployeeAPI.Employees.Models
         public JsonDocument? CustomData { get; set; }
         public Guid TenantId { get; set; }
         public Money Salary { get; set; } = default!;
+        public DateTime? DeletedAt { get; set; }
     }
 }

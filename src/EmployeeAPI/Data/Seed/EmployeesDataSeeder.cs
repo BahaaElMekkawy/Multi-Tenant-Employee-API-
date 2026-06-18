@@ -7,7 +7,7 @@ namespace EmployeeAPI.Data.Seed
     {
         public async Task SeedAllAsync()
         {
-            if (!await dbContext.Employees.AnyAsync())
+            if (!await dbContext.Employees.IgnoreQueryFilters().AnyAsync())
             {
                 await dbContext.Employees.AddRangeAsync(InitialData.Employees);
                 await dbContext.SaveChangesAsync();

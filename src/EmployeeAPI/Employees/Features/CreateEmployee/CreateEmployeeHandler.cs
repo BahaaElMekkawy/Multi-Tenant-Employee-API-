@@ -1,17 +1,20 @@
 ﻿using EmployeeAPI.Employees.Dtos;
 using EmployeeAPI.Employees.Models;
 using EmployeeAPI.Shared.ValueObjects;
+using EmployeeAPI.Tenancy;
 using Shared.CQRS;
 using System.Text.Json;
 
 namespace EmployeeAPI.Employees.Features.AddEmployee
 {
-    public record CreateEmployeeCommand(EmployeeDto Employee)
+    public record CreateEmployeeCommand(CreateEmployeeDto Employee)
         : ICommand<CreateEmployeeResult>;
 
     public record CreateEmployeeResult(Guid Id);
-    public class CreateEmployeeHandler(EmployeesDbContext dbContext) : ICommandHandler<CreateEmployeeCommand, CreateEmployeeResult>
+    public class CreateEmployeeHandler(EmployeesDbContext dbContext , ITenantService tenantService) : ICommandHandler<CreateEmployeeCommand, CreateEmployeeResult>
     {
+        private readonly ITenantService tenantService = tenantService;
+
         public async Task<CreateEmployeeResult> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
             var employee = CreateNewEmployee(command.Employee);
@@ -20,12 +23,12 @@ namespace EmployeeAPI.Employees.Features.AddEmployee
             return new CreateEmployeeResult(employee.Id);
         }
 
-        private Employee CreateNewEmployee(EmployeeDto employeeDto)
+        private Employee CreateNewEmployee(CreateEmployeeDto employeeDto)
         {
             var employee = new Employee
             {
                 Id = Guid.NewGuid(),
-                TenantId = employeeDto.TenantId,
+                TenantId = tenantService.TenantId,
                 FirstName = employeeDto.FirstName,
                 LastName = employeeDto.LastName,
                 Email = employeeDto.Email,

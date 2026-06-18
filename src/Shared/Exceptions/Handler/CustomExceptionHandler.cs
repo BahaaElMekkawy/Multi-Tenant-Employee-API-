@@ -34,6 +34,12 @@ namespace Shared.Exceptions.Handler
                     exception.GetType().Name,
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound
                 ),
+                UnauthorizedAccessException =>
+                (
+                    exception.Message,
+                    exception.GetType().Name,
+                    httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized
+                ),
                 _ => (
                     exception.Message,
                     exception.GetType().Name,
