@@ -1,0 +1,6 @@
+services:
+  employeesdb:
+    image: postgres
+
+volumes:
+  postgres_employees:

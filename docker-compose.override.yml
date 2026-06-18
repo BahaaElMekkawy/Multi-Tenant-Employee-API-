@@ -1,0 +1,12 @@
+services:
+  employeesdb:
+    container_name: EmployeesDb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=EmployeesDb
+    restart: always
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_employees:/var/lib/postgresql/

@@ -4,4 +4,7 @@
     <Project Path="src/Shared/Shared.csproj" Id="b8f01de0-bb0e-44fe-ba9b-127ee03f146a" />
   </Folder>
   <Folder Name="/tests/" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
 </Solution>
